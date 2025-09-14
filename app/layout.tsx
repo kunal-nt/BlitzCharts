@@ -13,21 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 
-
-export const metadata: Metadata = {
+export const metadata = {
   title: "BlitzCharts",
   description: "Beautiful Animated Charts for shadcn/ui ecosystem",
-    icons: {
-    icon: '/favicon.ico',
-  },
   openGraph: {
     title: "BlitzCharts",
     description: "Beautiful Animated Charts for shadcn/ui ecosystem",
-    url: "https://blitz-charts.vercel.app", // replace with your actual domain
+    url: "https://blitz-charts.vercel.app",
     siteName: "BlitzCharts",
     images: [
       {
-        url: "/og-image.png", // <-- replace with the image you uploaded
+        url: "/og-image.png", 
         width: 1200,
         height: 630,
         alt: "BlitzCharts Preview",
@@ -39,9 +35,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "BlitzCharts",
     description: "Beautiful Animated Charts for shadcn/ui ecosystem",
-    images: ["/og-image.png"],
+    images: ['https://blitz-charts.vercel.app/og-image.png'],
+    creator: "@partharora9128",
   },
 };
+
 
 export default function RootLayout({
   children,
