@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Gradient background -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF3C7"></stop> <!-- amber-100 -->
+      <stop offset="100%" stop-color="#FEE2E2"></stop> <!-- red-100 -->
+    </linearGradient>
+  </defs>
+
+  <!-- Background with rounded corners -->
+  <rect width="200" height="200" rx="24" fill="url(#grad)"></rect>
+
+  <!-- Centered bar chart icon -->
+  <g transform="translate(50, 50) scale(4)">
+    <path d="M3 3v16a2 2 0 0 0 2 2h16" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <rect x="15" y="5" width="4" height="12" rx="1" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+    <rect x="7" y="8" width="4" height="9" rx="1" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+  </g>
+</svg>

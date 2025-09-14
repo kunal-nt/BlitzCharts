@@ -12,9 +12,35 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
+
 export const metadata: Metadata = {
   title: "BlitzCharts",
-  description: "Collection of animated charts",
+  description: "Beautiful Animated Charts for shadcn/ui ecosystem",
+    icons: {
+    icon: '/favicon.ico',
+  },
+  openGraph: {
+    title: "BlitzCharts",
+    description: "Beautiful Animated Charts for shadcn/ui ecosystem",
+    url: "https://blitz-charts.vercel.app", // replace with your actual domain
+    siteName: "BlitzCharts",
+    images: [
+      {
+        url: "/og-image.png", // <-- replace with the image you uploaded
+        width: 1200,
+        height: 630,
+        alt: "BlitzCharts Preview",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BlitzCharts",
+    description: "Beautiful Animated Charts for shadcn/ui ecosystem",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
