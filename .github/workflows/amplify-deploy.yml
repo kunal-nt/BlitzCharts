@@ -1,6 +1,8 @@
 name: Deploy to Amplify
 
 on:
+  pull_request: 
+    branches: [ main]
   push:
     branches:
       - main  # or your specific branch
