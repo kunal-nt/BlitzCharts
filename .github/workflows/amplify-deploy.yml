@@ -2,10 +2,11 @@ name: Deploy to Amplify
 
 on:
   pull_request: 
-    branches: [ main]
+    branches: [ main , amplify-deploy-code ]
   push:
     branches:
       - main  # or your specific branch
+      - amplify-deploy-code
 
 jobs:
   build-and-deploy:
