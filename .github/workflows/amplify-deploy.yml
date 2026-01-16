@@ -32,7 +32,7 @@ jobs:
       # Amplify manual deployment requires the build folder to be zipped
       - name: Zip Build Output
         run: |
-          cd dist && zip -r ../build.zip . && cd ..
+          cd out && zip -r ../build.zip . && cd ..
 
       - name: Deploy to AWS Amplify
         run: |
