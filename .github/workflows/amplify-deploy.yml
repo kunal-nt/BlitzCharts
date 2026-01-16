@@ -39,22 +39,34 @@ jobs:
 
       - name: Deploy to AWS Amplify
         run: |
-          # 1. Create a deployment and capture both the URL and the Job ID
-          # We'll store the output in a temporary file to parse it twice
-          aws amplify create-deployment --app-id ${{ vars.AMPLIFY_APP_ID }} --branch-name main > deploy_info.json
+          APP_ID="${{ vars.AMPLIFY_APP_ID }}"
+          BRANCH="main"
+
+          # 1. Check for any running or pending jobs and stop them
+          echo "Checking for stuck jobs..."
+          STUCK_JOBS=$(aws amplify list-jobs --app-id $APP_ID --branch-name $BRANCH --query 'jobSummaries[?status==`PENDING` || status==`RUNNING` || status==`PROVISIONING`].jobId' --output text)
           
-          UPLOAD_URL=$(cat deploy_info.json | jq -r '.zipUploadUrl')
-          JOB_ID=$(cat deploy_info.json | jq -r '.jobId')
+          for JOB in $STUCK_JOBS; do
+            echo "Stopping stuck job: $JOB"
+            aws amplify stop-job --app-id $APP_ID --branch-name $BRANCH --job-id $JOB || true
+          done
+
+          # 2. Create the new deployment
+          echo "Creating new deployment..."
+          aws amplify create-deployment --app-id $APP_ID --branch-name $BRANCH > deploy_info.json
 
           cat deploy_info.json
           
-          echo "\nUploading to Amplify (Job ID: $JOB_ID)..."
+          UPLOAD_URL=$(jq -r '.zipUploadUrl' deploy_info.json)
+          JOB_ID=$(jq -r '.jobId' deploy_info.json)
 
-          # 2. Upload the zip file
+          # 3. Upload the zip file
+          echo "Uploading build.zip..."
           curl -H "Content-Type: application/zip" --upload-file build.zip "$UPLOAD_URL"
-          
-          # 3. Start the deployment job using the Job ID we captured
-          aws amplify start-deployment --app-id ${{ vars.AMPLIFY_APP_ID }} --branch-name main --job-id "$JOB_ID"
+
+          # 4. Start the deployment
+          echo "Starting deployment for Job ID: $JOB_ID"
+          aws amplify start-deployment --app-id $APP_ID --branch-name $BRANCH --job-id "$JOB_ID"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
