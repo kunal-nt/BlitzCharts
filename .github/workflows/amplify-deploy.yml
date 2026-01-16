@@ -28,7 +28,10 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_APP_ENV: production
-
+        
+      - name: Build Folder
+        run: ls
+      
       # Amplify manual deployment requires the build folder to be zipped
       - name: Zip Build Output
         run: |
