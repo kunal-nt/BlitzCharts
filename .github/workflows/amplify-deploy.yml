@@ -67,11 +67,44 @@ jobs:
           # 4. Start the deployment
           echo "Starting deployment for Job ID: $JOB_ID"
           aws amplify start-deployment --app-id $APP_ID --branch-name $BRANCH --job-id "$JOB_ID"
+
+          # 5. Polling Loop: Verify status every 15 seconds
+          while true; do
+            STATUS=$(aws amplify get-job --app-id $APP_ID --branch-name $BRANCH --job-id $JOB_ID --query 'job.summary.status' --output text)
+            echo "Current Status: $STATUS"
+            
+            if [ "$STATUS" = "SUCCEED" ]; then
+              echo "✅ Deployment Successful!"
+              break
+            elif [ "$STATUS" = "FAILED" ]; then
+              echo "❌ Deployment Failed!"
+              exit 1
+            fi
+            sleep 15
+          done
+
+         
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-south-1
 
+      - name: Website Health Check
+        run: |
+          # 6. Website Health Check
+          # Replace 'your-app-url' with your actual Amplify domain if you have it as a variable
+          APP_ID="${{ vars.AMPLIFY_APP_ID }}"
+          BRANCH="main"
+          echo "Performing final health check..."
+          URL="https://${BRANCH}.${APP_ID}.amplifyapp.com" # Default Amplify URL format
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}" $URL)
+          
+          if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 301 ]; then
+            echo "🚀 Website is LIVE at $URL (Status: $STATUS_CODE)"
+          else
+            echo "⚠️ Deployment succeeded but website returned status: $STATUS_CODE"
+            exit 1
+          fi
           
 
       # - name: Deploy to AWS Amplify
